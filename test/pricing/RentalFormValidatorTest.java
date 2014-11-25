@@ -109,6 +109,19 @@ public class RentalFormValidatorTest {
     }
 
     /**
+     * Test reverse of isCustomerNull method, of class RentalFormValidator.
+     */
+    @Test
+    public void testIsCustomerNotNull() {
+        System.out.println("isCustomerNull");
+        currRequest.setParameter("customerNo", "2");
+        RentalFormValidator instance = new RentalFormValidator(currRequest);
+        boolean expResult = false;
+        boolean result = instance.isCustomerNull();
+        assertEquals(expResult, result);
+    }
+
+    /**
      * Test of isCustomerNumeric method, of class RentalFormValidator.
      */
     @Test
