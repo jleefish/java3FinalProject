@@ -145,7 +145,7 @@ public class RentalFormValidator {
 
     public boolean isCustomerNull() {
         try {
-            if (formRequest.getParameter("customerNo").isEmpty() || formRequest.getParameter("customer") == null) {
+            if (formRequest.getParameter("customerNo").isEmpty()) {
                 errorCodes.add(1011);
                 return true;
             }
