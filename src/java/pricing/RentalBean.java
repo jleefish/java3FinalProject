@@ -8,6 +8,8 @@ package pricing;
 import java.beans.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 /**
  *
@@ -255,6 +257,49 @@ public class RentalBean implements Serializable{
         this.price = price;
     }
 
+    private BigDecimal calculatePrice(){
+        double resultPrice = 0.00;
+        int weekdays=0;
+        int weekends=0;
+        if(getDropoffDay() - getPickupDay() >= 5){
+            resultPrice = priceSchedule.getWeeklyRate().doubleValue()*(getDropoffDay() - getPickupDay());
+
+        }else if((getPickupDay()+1 == getDropoffDay()) && (getPickupHour() < getDropoffHour())){
+            if(isPickupDateWeekend()){
+                resultPrice = priceSchedule.getWeekendRate().doubleValue();
+            }else{
+                resultPrice = priceSchedule.getWeekdayRate().doubleValue();
+            }
+        }else{
+            if(isPickupDateWeekend()){
+                weekends++;
+            }else{
+                weekdays++;
+            }
+
+            if(isDropoffDateWeekend()){
+                weekends++;
+            }else{
+                weekdays++;
+            }
+
+            for(int dayOfWeek = getPickupDate().get(Calendar.DAY_OF_WEEK)+1, i = 1; i < getDropoffDay() - getPickupDay() - 1; i++) {
+                if(dayOfWeek == 7){
+                    dayOfWeek=1;
+                    continue;
+                }else if(dayOfWeek == 5 || dayOfWeek == 6){
+                    weekends++;
+                }else{
+                    weekdays++;
+                }
+                dayOfWeek++;
+            }
+
+            resultPrice = priceSchedule.getWeekdayRate().doubleValue()*weekdays + priceSchedule.getWeekendRate().doubleValue()*weekends;
+        }
+        return new BigDecimal(resultPrice);
+    }
+
     /**
      * @param priceSchedule the priceSchedule to set
      */
@@ -268,5 +313,26 @@ public class RentalBean implements Serializable{
 
     public void setCustomerNumber(int customerNumber) {
         this.customerNumber = customerNumber;
+    }
+
+    public Calendar getPickupDate(){
+        Calendar cPickUp = Calendar.getInstance();
+        cPickUp.set(getPickupYear(),getPickupMon(),getPickupDay());
+        return cPickUp;
+
+    }
+
+    public Calendar getDropoffDate(){
+        Calendar cDropOff = Calendar.getInstance();
+        cDropOff.set(getDropoffYear(),getDropoffMon(),getDropoffDay());
+        return cDropOff;
+    }
+
+    public Boolean isPickupDateWeekend(){
+        return (getPickupDate().get(Calendar.DAY_OF_WEEK) == 5 && getPickupHour() <= 7) || getPickupDate().get(Calendar.DAY_OF_WEEK) == 6 || getPickupDate().get(Calendar.DAY_OF_WEEK) == 7 || (getPickupDate().get(Calendar.DAY_OF_WEEK) == 1 && getPickupHour() <= 11);
+    }
+
+    public Boolean isDropoffDateWeekend(){
+        return (getDropoffDate().get(Calendar.DAY_OF_WEEK) == 5 && getDropoffHour() <= 7) || getDropoffDate().get(Calendar.DAY_OF_WEEK) == 6 || getDropoffDate().get(Calendar.DAY_OF_WEEK) == 7 || (getDropoffDate().get(Calendar.DAY_OF_WEEK) == 1 && getDropoffHour() <= 11);
     }
 }

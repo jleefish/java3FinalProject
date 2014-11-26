@@ -8,6 +8,8 @@ package pricing;
 import pricing.PriceSchedule;
 import pricing.RentalBean;
 import java.math.BigDecimal;
+import java.util.Calendar;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,6 +27,7 @@ public class RentalBeanTest {
     // testGetWeeklyStandard, testGetWeekdayStandard, testGetWeekendStandard
     // testGetWeeklyLuxuary, testGetWeekdayLuxuary, testGetWeekendLuxuary
     // testGetWeeklyMinivan, testGetWeekdayMinivan, testGetWeekendMinivan
+    private RentalBean instance = new RentalBean();
     
     public RentalBeanTest() {
     }
@@ -39,10 +42,25 @@ public class RentalBeanTest {
     
     @Before
     public void setUp() {
+        instance.setCustomerNumber(1000);
+        instance.setPickupHour(8);
+        instance.setPickupDay(10);
+        instance.setPickupMon(3);
+        instance.setPickupYear(2014);
+        instance.setPickupMin(2);
+        instance.setDropoffHour(10);
+        instance.setDropoffDay(13);
+        instance.setDropoffMon(3);
+        instance.setDropoffYear(2014);
+        instance.setDropoffMin(2);
+        instance.setRentalType("standard");
+        instance.setCardType("visa");
+        instance.setCardNumber("4123456789012");
     }
     
     @After
     public void tearDown() {
+        instance = null;
     }
 
     /**
@@ -51,11 +69,9 @@ public class RentalBeanTest {
     @Test
     public void testGetPickupYear() {
         System.out.println("getPickupYear");
-        RentalBean instance = new RentalBean();
         int expResult = 2014;
-        instance.setPickupYear(expResult);
-        
         int result = instance.getPickupYear();
+
         assertEquals(expResult, result);
     }
 
@@ -65,10 +81,8 @@ public class RentalBeanTest {
     @Test
     public void testSetPickupYear() {
         System.out.println("setPickupYear");
-        int pickupYear = 2014;
-        RentalBean instance = new RentalBean();
+        int pickupYear = 2015;
         instance.setPickupYear(pickupYear);
-        
         int actual = instance.getPickupYear();
         assertEquals(pickupYear, actual);
     }
@@ -79,10 +93,7 @@ public class RentalBeanTest {
     @Test
     public void testGetPickupMon() {
         System.out.println("getPickupMon");
-        RentalBean instance = new RentalBean();
-        int expResult = 1;
-        instance.setPickupMon(expResult);
-        
+        int expResult = 3;
         int result = instance.getPickupMon();
         assertEquals(expResult, result);
     }
@@ -93,10 +104,8 @@ public class RentalBeanTest {
     @Test
     public void testSetPickupMon() {
         System.out.println("setPickupMon");
-        int pickupMon = 0;
-        RentalBean instance = new RentalBean();
+        int pickupMon = 1;
         instance.setPickupMon(pickupMon);
-        
         int actual = instance.getPickupMon();
         assertEquals(pickupMon, actual);
     }
@@ -107,10 +116,7 @@ public class RentalBeanTest {
     @Test
     public void testGetPickupDay() {
         System.out.println("getPickupDay");
-        RentalBean instance = new RentalBean();
-        int expResult = 1;
-        instance.setPickupDay(expResult);
-        
+        int expResult = 10;
         int result = instance.getPickupDay();
         assertEquals(expResult, result);
     }
@@ -121,12 +127,10 @@ public class RentalBeanTest {
     @Test
     public void testSetPickupDay() {
         System.out.println("setPickupDay");
-        int pickupDay = 0;
-        RentalBean instance = new RentalBean();
+        int pickupDay = 7;
         instance.setPickupDay(pickupDay);
-        
-        int actual = instance.getPickupDay();
-        assertEquals(pickupDay, actual);
+        int result = instance.getPickupDay();
+        assertEquals(pickupDay, result);
     }
 
     /**
@@ -135,10 +139,7 @@ public class RentalBeanTest {
     @Test
     public void testGetPickupHour() {
         System.out.println("getPickupHour");
-        RentalBean instance = new RentalBean();
-        int expResult = 0;
-        instance.setPickupHour(expResult);
-        
+        int expResult = 8;
         int result = instance.getPickupHour();
         assertEquals(expResult, result);
     }
@@ -149,10 +150,8 @@ public class RentalBeanTest {
     @Test
     public void testSetPickupHour() {
         System.out.println("setPickupHour");
-        int pickupHour = 0;
-        RentalBean instance = new RentalBean();
+        int pickupHour = 2;
         instance.setPickupHour(pickupHour);
-        
         int actual = instance.getPickupHour();
         assertEquals(pickupHour, actual);
     }
@@ -163,10 +162,7 @@ public class RentalBeanTest {
     @Test
     public void testGetPickupMin() {
         System.out.println("getPickupMin");
-        RentalBean instance = new RentalBean();
-        int expResult = 1;
-        instance.setPickupMin(expResult);
-        
+        int expResult = 2;
         int result = instance.getPickupMin();
         assertEquals(expResult, result);
     }
@@ -178,9 +174,7 @@ public class RentalBeanTest {
     public void testSetPickupMin() {
         System.out.println("setPickupMin");
         int pickupMin = 1;
-        RentalBean instance = new RentalBean();
         instance.setPickupMin(pickupMin);
-        
         int actual = instance.getPickupMin();
         assertEquals(pickupMin, actual);
     }
@@ -191,10 +185,7 @@ public class RentalBeanTest {
     @Test
     public void testGetDropoffYear() {
         System.out.println("getDropoffYear");
-        RentalBean instance = new RentalBean();
-        int expResult = 1;
-        instance.setDropoffYear(expResult);
-        
+        int expResult = 2014;
         int result = instance.getDropoffYear();
         assertEquals(expResult, result);
     }
@@ -205,10 +196,8 @@ public class RentalBeanTest {
     @Test
     public void testSetDropoffYear() {
         System.out.println("setDropoffYear");
-        int dropoffYear = 1;
-        RentalBean instance = new RentalBean();
+        int dropoffYear = 2015;
         instance.setDropoffYear(dropoffYear);
-        
         int actual = instance.getDropoffYear();
         assertEquals(dropoffYear, actual);
     }
@@ -219,9 +208,7 @@ public class RentalBeanTest {
     @Test
     public void testGetDropoffMon() {
         System.out.println("getDropoffMon");
-        RentalBean instance = new RentalBean();
-        int expResult = 1;
-        instance.setDropoffMon(expResult);
+        int expResult = 3;
         int result = instance.getDropoffMon();
         assertEquals(expResult, result);
     }
@@ -232,10 +219,8 @@ public class RentalBeanTest {
     @Test
     public void testSetDropoffMon() {
         System.out.println("setDropoffMon");
-        int dropoffMon = 0;
-        RentalBean instance = new RentalBean();
+        int dropoffMon = 2;
         instance.setDropoffMon(dropoffMon);
-        
         int actual = instance.getDropoffMon();
         assertEquals(dropoffMon, actual);
     }
@@ -246,9 +231,7 @@ public class RentalBeanTest {
     @Test
     public void testGetDropoffDay() {
         System.out.println("getDropoffDay");
-        RentalBean instance = new RentalBean();
-        int expResult = 1;
-        instance.setDropoffDay(expResult);
+        int expResult = 13;
         int result = instance.getDropoffDay();
         assertEquals(expResult, result);
     }
@@ -259,10 +242,8 @@ public class RentalBeanTest {
     @Test
     public void testSetDropoffDay() {
         System.out.println("setDropoffDay");
-        int dropoffDay = 0;
-        RentalBean instance = new RentalBean();
+        int dropoffDay = 1;
         instance.setDropoffDay(dropoffDay);
-        
         int actual = instance.getDropoffDay();
         assertEquals(dropoffDay, actual);
     }
@@ -273,10 +254,7 @@ public class RentalBeanTest {
     @Test
     public void testGetDropoffHour() {
         System.out.println("getDropoffHour");
-        RentalBean instance = new RentalBean();
-        int expResult = 1;
-        instance.setDropoffHour(expResult);
-        
+        int expResult = 10;
         int result = instance.getDropoffHour();
         assertEquals(expResult, result);
     }
@@ -288,9 +266,7 @@ public class RentalBeanTest {
     public void testSetDropoffHour() {
         System.out.println("setDropoffHour");
         int dropoffHour = 1;
-        RentalBean instance = new RentalBean();
         instance.setDropoffHour(dropoffHour);
-        
         int actual = instance.getDropoffHour();
         assertEquals(dropoffHour, actual);
     }
@@ -301,9 +277,7 @@ public class RentalBeanTest {
     @Test
     public void testGetDropoffMin() {
         System.out.println("getDropoffMin");
-        RentalBean instance = new RentalBean();
-        int expResult = 1;
-        instance.setDropoffMin(expResult);
+        int expResult = 2;
         int result = instance.getDropoffMin();
         assertEquals(expResult, result);
     }
@@ -315,7 +289,6 @@ public class RentalBeanTest {
     public void testSetDropoffMin() {
         System.out.println("setDropoffMin");
         int dropoffMin = 1;
-        RentalBean instance = new RentalBean();
         instance.setDropoffMin(dropoffMin);
         int actual = instance.getDropoffMin();
         assertEquals(dropoffMin, actual);
@@ -327,9 +300,7 @@ public class RentalBeanTest {
     @Test
     public void testGetRentalType() {
         System.out.println("getRentalType");
-        RentalBean instance = new RentalBean();
-        String expResult = "weekday";
-        instance.setRentalType(expResult);
+        String expResult = "standard";
         String result = instance.getRentalType();
         assertEquals(expResult, result);
     }
@@ -340,8 +311,7 @@ public class RentalBeanTest {
     @Test
     public void testSetRentalType() {
         System.out.println("setRentalType");
-        String rentalType = "weekday";
-        RentalBean instance = new RentalBean();
+        String rentalType = "economy";
         instance.setRentalType(rentalType);
         String actual = instance.getRentalType();
         assertEquals(rentalType, actual);
@@ -353,9 +323,7 @@ public class RentalBeanTest {
     @Test
     public void testGetCardType() {
         System.out.println("getCardType");
-        RentalBean instance = new RentalBean();
         String expResult = "visa";
-        instance.setCardType(expResult);
         String result = instance.getCardType();
         assertEquals(expResult, result);
     }
@@ -366,8 +334,7 @@ public class RentalBeanTest {
     @Test
     public void testSetCardType() {
         System.out.println("setCardType");
-        String cardType = "visa";
-        RentalBean instance = new RentalBean();
+        String cardType = "master";
         instance.setCardType(cardType);
         String actual = instance.getCardType();
         assertEquals(cardType, actual);
@@ -379,9 +346,7 @@ public class RentalBeanTest {
     @Test
     public void testGetCardNumber() {
         System.out.println("getCardNumber");
-        RentalBean instance = new RentalBean();
-        String expResult = "111";
-        instance.setCardNumber(expResult);
+        String expResult = "4123456789012";
         String result = instance.getCardNumber();
         assertEquals(expResult, result);
     }
@@ -392,8 +357,7 @@ public class RentalBeanTest {
     @Test
     public void testSetCardNumber() {
         System.out.println("setCardNumber");
-        String cardNumber = "111";
-        RentalBean instance = new RentalBean();
+        String cardNumber = "4123436589012";
         instance.setCardNumber(cardNumber);
         String actual = instance.getCardNumber();
         assertEquals(cardNumber, actual);
@@ -503,5 +467,28 @@ public class RentalBeanTest {
         assertEquals(custNumber, actual);
     }
 
-    
+    @Test
+    public void testGetPickupDate() throws Exception {
+/*        System.out.println("getPickUpDate");
+        Calendar cPickUpExpected = Calendar.getInstance();
+        cPickUpExpected.set(2014,3,10);
+        Calendar cPickUpActual = Calendar.getInstance();
+        cPickUpActual.set(instance.getPickupYear(),instance.getPickupMon(),instance.getPickupDay());
+        assertSame(cPickUpExpected.getTime(),cPickUpActual.getTime());*/
+    }
+
+    @Test
+    public void testGetDropoffDate() throws Exception {
+
+    }
+
+    @Test
+    public void testIsPickupDateWeekend() throws Exception {
+
+    }
+
+    @Test
+    public void testIsDropoffDateWeekend() throws Exception {
+
+    }
 }

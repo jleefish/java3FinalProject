@@ -113,7 +113,7 @@ public class RentalFormValidatorTest {
      */
     @Test
     public void testIsCustomerNotNull() {
-        System.out.println("isCustomerNull");
+        System.out.println("isCustomerNotNull");
         currRequest.setParameter("customerNo", "2");
         RentalFormValidator instance = new RentalFormValidator(currRequest);
         boolean expResult = false;
