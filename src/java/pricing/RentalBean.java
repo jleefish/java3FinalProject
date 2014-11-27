@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 /**
  *
- * @author jhlee
+ * @author junghun lee and julio tain sueiras
  */
 public class RentalBean implements Serializable{
     private int pickupYear;

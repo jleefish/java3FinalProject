@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author jhlee
+ * @author junghun lee and julio tain sueiras
  */
 public class RentalBeanTest {
     

@@ -12,7 +12,7 @@ import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
- * @author jhlee
+ * @author junghun lee and julio tain sueiras
  */
 public class RentalFormValidator {
 

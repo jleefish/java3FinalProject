@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author jhlee
+ * @author junghun lee and julio tain sueiras
  */
 @WebServlet(urlPatterns = {"/ValidationTest"})
 public class ValidationTest extends HttpServlet {
