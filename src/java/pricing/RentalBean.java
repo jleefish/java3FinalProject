@@ -247,24 +247,14 @@ public class RentalBean implements Serializable{
      * @return the price
      */
     public BigDecimal getPrice() {
-        return price;
-    }
-
-    /**
-     * @param price the price to set
-     */
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    private BigDecimal calculatePrice(){
         double resultPrice = 0.00;
         int weekdays=0;
         int weekends=0;
+
         if(getDropoffDay() - getPickupDay() >= 5){
             resultPrice = priceSchedule.getWeeklyRate().doubleValue()*(getDropoffDay() - getPickupDay());
 
-        }else if((getPickupDay()+1 == getDropoffDay()) && (getPickupHour() < getDropoffHour())){
+        }else if((getPickupDay()+1 == getDropoffDay()) && (getPickupHour() > getDropoffHour())){
             if(isPickupDateWeekend()){
                 resultPrice = priceSchedule.getWeekendRate().doubleValue();
             }else{
@@ -278,12 +268,14 @@ public class RentalBean implements Serializable{
             }
 
             if(isDropoffDateWeekend()){
-                weekends++;
+                if(getDropOffDayOfWeek() != 7){
+                    weekends++;
+                }
             }else{
                 weekdays++;
             }
 
-            for(int dayOfWeek = getPickupDate().get(Calendar.DAY_OF_WEEK)+1, i = 1; i < getDropoffDay() - getPickupDay() - 1; i++) {
+            for(int dayOfWeek = getPickUpDayOfWeek() +1, i = 1; i < getDropoffDay() - getPickupDay(); i++) {
                 if(dayOfWeek == 7){
                     dayOfWeek=1;
                     continue;
@@ -298,6 +290,13 @@ public class RentalBean implements Serializable{
             resultPrice = priceSchedule.getWeekdayRate().doubleValue()*weekdays + priceSchedule.getWeekendRate().doubleValue()*weekends;
         }
         return new BigDecimal(resultPrice);
+    }
+
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     /**
@@ -317,22 +316,36 @@ public class RentalBean implements Serializable{
 
     public Calendar getPickupDate(){
         Calendar cPickUp = Calendar.getInstance();
-        cPickUp.set(getPickupYear(),getPickupMon(),getPickupDay());
+        cPickUp.set(getPickupYear(),getPickupMon()-1,getPickupDay()-1);
         return cPickUp;
 
     }
 
     public Calendar getDropoffDate(){
         Calendar cDropOff = Calendar.getInstance();
-        cDropOff.set(getDropoffYear(),getDropoffMon(),getDropoffDay());
+        cDropOff.set(getDropoffYear(),getDropoffMon()-1,getDropoffDay()-1);
         return cDropOff;
     }
 
     public Boolean isPickupDateWeekend(){
-        return (getPickupDate().get(Calendar.DAY_OF_WEEK) == 5 && getPickupHour() <= 7) || getPickupDate().get(Calendar.DAY_OF_WEEK) == 6 || getPickupDate().get(Calendar.DAY_OF_WEEK) == 7 || (getPickupDate().get(Calendar.DAY_OF_WEEK) == 1 && getPickupHour() <= 11);
+        return (getPickUpDayOfWeek() == 5 && getPickupHour() >= 7)
+                || getPickUpDayOfWeek() == 6
+                || getPickUpDayOfWeek() == 7
+                || (getPickUpDayOfWeek() == 1 && getPickupHour() <= 11);
+    }
+
+    public int getPickUpDayOfWeek() {
+        return getPickupDate().get(Calendar.DAY_OF_WEEK);
     }
 
     public Boolean isDropoffDateWeekend(){
-        return (getDropoffDate().get(Calendar.DAY_OF_WEEK) == 5 && getDropoffHour() <= 7) || getDropoffDate().get(Calendar.DAY_OF_WEEK) == 6 || getDropoffDate().get(Calendar.DAY_OF_WEEK) == 7 || (getDropoffDate().get(Calendar.DAY_OF_WEEK) == 1 && getDropoffHour() <= 11);
+        return (getDropOffDayOfWeek() == 5 && getDropoffHour() >= 7)
+                || getDropOffDayOfWeek() == 6
+                || getDropOffDayOfWeek() == 7
+                || (getDropOffDayOfWeek() == 1 && getDropoffHour() <= 11);
+    }
+
+    public int getDropOffDayOfWeek() {
+        return getDropoffDate().get(Calendar.DAY_OF_WEEK);
     }
 }

@@ -42,20 +42,26 @@ public class RentalBeanTest {
     
     @Before
     public void setUp() {
+        PriceSchedule customPriceSchedule = new PriceSchedule();
+        customPriceSchedule.setWeekdayRate(new BigDecimal(40.00));
+        customPriceSchedule.setWeekendRate(new BigDecimal(30.00));
+        customPriceSchedule.setWeeklyRate(new BigDecimal(25.00));
         instance.setCustomerNumber(1000);
-        instance.setPickupHour(8);
-        instance.setPickupDay(10);
-        instance.setPickupMon(3);
+        instance.setPickupHour(3);
+        instance.setPickupDay(20);
+        instance.setPickupMon(11);
         instance.setPickupYear(2014);
         instance.setPickupMin(2);
         instance.setDropoffHour(10);
-        instance.setDropoffDay(13);
-        instance.setDropoffMon(3);
+        instance.setDropoffDay(24);
+        instance.setDropoffMon(11);
         instance.setDropoffYear(2014);
         instance.setDropoffMin(2);
         instance.setRentalType("standard");
         instance.setCardType("visa");
         instance.setCardNumber("4123456789012");
+        instance.setPriceSchedule(customPriceSchedule);
+
     }
     
     @After
@@ -93,7 +99,7 @@ public class RentalBeanTest {
     @Test
     public void testGetPickupMon() {
         System.out.println("getPickupMon");
-        int expResult = 3;
+        int expResult = 11;
         int result = instance.getPickupMon();
         assertEquals(expResult, result);
     }
@@ -116,7 +122,7 @@ public class RentalBeanTest {
     @Test
     public void testGetPickupDay() {
         System.out.println("getPickupDay");
-        int expResult = 10;
+        int expResult = 20;
         int result = instance.getPickupDay();
         assertEquals(expResult, result);
     }
@@ -139,7 +145,7 @@ public class RentalBeanTest {
     @Test
     public void testGetPickupHour() {
         System.out.println("getPickupHour");
-        int expResult = 8;
+        int expResult = 3;
         int result = instance.getPickupHour();
         assertEquals(expResult, result);
     }
@@ -208,7 +214,7 @@ public class RentalBeanTest {
     @Test
     public void testGetDropoffMon() {
         System.out.println("getDropoffMon");
-        int expResult = 3;
+        int expResult = 11;
         int result = instance.getDropoffMon();
         assertEquals(expResult, result);
     }
@@ -219,7 +225,7 @@ public class RentalBeanTest {
     @Test
     public void testSetDropoffMon() {
         System.out.println("setDropoffMon");
-        int dropoffMon = 2;
+        int dropoffMon = 11;
         instance.setDropoffMon(dropoffMon);
         int actual = instance.getDropoffMon();
         assertEquals(dropoffMon, actual);
@@ -231,7 +237,7 @@ public class RentalBeanTest {
     @Test
     public void testGetDropoffDay() {
         System.out.println("getDropoffDay");
-        int expResult = 13;
+        int expResult = 24;
         int result = instance.getDropoffDay();
         assertEquals(expResult, result);
     }
@@ -395,11 +401,9 @@ public class RentalBeanTest {
     @Test
     public void testGetPrice() {
         System.out.println("getPrice");
-        RentalBean instance = new RentalBean();
-        BigDecimal expResult = new BigDecimal(1);
-        instance.setPrice(expResult);
-        BigDecimal result = instance.getPrice();
-        assertEquals(expResult, result);
+        BigDecimal expected = new BigDecimal(130);
+        BigDecimal actual = instance.getPrice();
+        assertEquals(expected, actual);
     }
 
     /**
@@ -407,12 +411,6 @@ public class RentalBeanTest {
      */
     @Test
     public void testSetPrice() {
-        System.out.println("setPrice");
-        BigDecimal price = new BigDecimal(1);
-        RentalBean instance = new RentalBean();
-        instance.setPrice(price);
-        BigDecimal actual = instance.getPrice();
-        assertEquals(price, actual);
     }
 
     /**
@@ -469,12 +467,12 @@ public class RentalBeanTest {
 
     @Test
     public void testGetPickupDate() throws Exception {
-/*        System.out.println("getPickUpDate");
-        Calendar cPickUpExpected = Calendar.getInstance();
-        cPickUpExpected.set(2014,3,10);
-        Calendar cPickUpActual = Calendar.getInstance();
-        cPickUpActual.set(instance.getPickupYear(),instance.getPickupMon(),instance.getPickupDay());
-        assertSame(cPickUpExpected.getTime(),cPickUpActual.getTime());*/
+//        System.out.println("getPickUpDate");
+//        Calendar cPickUpExpected = Calendar.getInstance();
+//        cPickUpExpected.set(2014,3,10);
+//        Calendar cPickUpActual = Calendar.getInstance();
+//        cPickUpActual.set(instance.getPickupYear(),instance.getPickupMon(),instance.getPickupDay());
+//        assertSame(cPickUpExpected.getTime(),cPickUpActual.getTime());
     }
 
     @Test
