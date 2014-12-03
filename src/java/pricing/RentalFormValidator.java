@@ -12,7 +12,7 @@ import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
- * @author junghun lee and julio tain sueiras
+ * @author jhlee
  */
 public class RentalFormValidator {
 
@@ -145,7 +145,7 @@ public class RentalFormValidator {
 
     public boolean isCustomerNull() {
         try {
-            if (formRequest.getParameter("customerNo").isEmpty()) {
+            if (formRequest.getParameter("customerNo").isEmpty()) { // || formRequest.getParameter("customer") == null
                 errorCodes.add(1011);
                 return true;
             }

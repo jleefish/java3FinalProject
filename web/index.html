@@ -12,7 +12,7 @@ and open the template in the editor.
     </head>
     <body>
         <h1>Make your reservation!</h1><hr><br>
-        <form action="ValidationTest" method="POST">
+        <form action="RentalFormValidator" method="POST">
             Customer Number: <input type="text" name="customerNo"><br><br>
             ----- Pick Up -----<br>
             Hour(0 ~ 23): <input type="text" name="pickupHour">
@@ -33,7 +33,8 @@ and open the template in the editor.
             <input type="radio" name="cartype" value="economy">economy
             <input type="radio" name="cartype" value="standard" checked>standard
             <input type="radio" name="cartype" value="luxury">luxury
-            <input type="radio" name="cartype" value="minivan">minivan<br><br>
+            <input type="radio" name="cartype" value="minivan">minivan
+            <input type="radio" name="cartype" value="hybrid">hybrid<br><br>
             ----- Credit Card -----<br>
             <!--<input type="text" name="creditCardType"><br><br>-->
             <input type="radio" name="creditCardType" value="visa" checked>VISA

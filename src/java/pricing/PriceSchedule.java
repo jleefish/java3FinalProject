@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 /**
  *
- * @author junghun lee and julio tain sueiras
+ * @author Joseph Sant
  */
 public class PriceSchedule implements Serializable {
      private String typeName;
