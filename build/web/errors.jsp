@@ -26,6 +26,7 @@
                     </td>
                 </tr>
             </c:forEach>
-        </table>
+        </table><hr>
+        <a href="index.html">start over</a>
     </body>
 </html>

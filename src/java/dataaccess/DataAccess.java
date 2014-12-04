@@ -65,7 +65,7 @@ public class DataAccess {
      */
     public boolean select(int custNo) {
         boolean custIdValid = false;
-        String query = "select customerId from customer where ?;";
+        String query = "select customerId from customer where customerId = ?;";
         try {
             pStatement = connection.prepareStatement(query);
             pStatement.setString(1, String.valueOf(custNo));
