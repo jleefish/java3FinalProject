@@ -5,7 +5,6 @@ package pricing;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import dataaccess.CarTypeNotFoundException;
 import dataaccess.DataAccess;
 
 import java.io.IOException;
@@ -22,9 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author junghun lee and julio tain sueiras
  */
-@WebServlet(name = "ValidationTest")
+@WebServlet(urlPatterns = {"/ValidationTest"})
 public class ValidationTest extends HttpServlet {
-    private RentalBean custBean = new RentalBean();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,7 +34,7 @@ public class ValidationTest extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        
         RentalFormValidator formValidator = new RentalFormValidator(request);
         boolean validation = formValidator.isValid();
         if(validation){
@@ -45,35 +43,26 @@ public class ValidationTest extends HttpServlet {
             boolean custNumberExist = db.doesCustNumberExist(Integer.parseInt(request.getParameter("customerNo")));
 
             if(custNumberExist){
-                custBean = formValidator.getBean();
-		custBean.setRentalType(request.getParameter("cartype"));
-		custBean.setCardType(request.getParameter("creditCardType"));
-
-                try {
-                    custBean.setPriceSchedule(db.getCarTypePriceSchedule(custBean.getRentalType()));
-                } catch (CarTypeNotFoundException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(custBean.getPrice());
-                db.disconnect();
-                request.setAttribute("bean", custBean);
-                getServletContext().getRequestDispatcher("/rentals.jsp").forward(request,response);
-
-            }else{
-                db.disconnect();
-                getServletContext().getRequestDispatcher("/invalidCustomer.jsp").forward(request, response);
+                RentalBean bean = setUpBean(request);
             }
 
         } else{
             ArrayList<Integer> errorList = formValidator.getErrorCodes();
-            request.setAttribute("errorCodes", errorList);
-            getServletContext().getRequestDispatcher("/errors.jsp").forward(request, response);
+            request.setAttribute("errorList", errorList);
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/errors.jsp");
+            rd.forward(request,response);
+
         }
 
+
+
+
+        try (PrintWriter out = response.getWriter()) {
+        }
     }
 
-
-    public static void setUpBean(HttpServletRequest request, RentalBean bean){
+    public static RentalBean setUpBean(HttpServletRequest request){
+        RentalBean bean = new RentalBean();
         bean.setCustomerNumber(Integer.parseInt(request.getParameter("customerNo")));
         bean.setPickupHour(Integer.parseInt(request.getParameter("pickupHour")));
         bean.setPickupDay(Integer.parseInt(request.getParameter("pickupDay")));
@@ -83,6 +72,10 @@ public class ValidationTest extends HttpServlet {
         bean.setDropoffDay(Integer.parseInt(request.getParameter("dropoffDay")));
         bean.setDropoffMon(Integer.parseInt(request.getParameter("dropoffMonth")));
         bean.setDropoffYear(Integer.parseInt(request.getParameter("dropoffYear")));
+        bean.setRentalType(request.getParameter("carType"));
+        bean.setCardType(request.getParameter("cardType"));
+        bean.setCardNumber(request.getParameter("creditCardNo"));
+        return bean;
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
