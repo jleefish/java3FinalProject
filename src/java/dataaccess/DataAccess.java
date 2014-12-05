@@ -5,6 +5,10 @@
  */
 package dataaccess;
 
+import pricing.PriceSchedule;
+
+import javax.validation.constraints.Null;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -34,9 +38,9 @@ public class DataAccess {
             e.printStackTrace();
         }
 
-        String connectionURL = "jdbc:mysql://localhost/cars";
+        String connectionURL = "jdbc:mysql://localhost/Cars";
         String user = "root";
-        String pass = "";
+        String pass = "1111";
 
         try {
             connection = DriverManager.getConnection(connectionURL, user, pass);
@@ -59,17 +63,18 @@ public class DataAccess {
     }
 
     /**
-     * select method to retrieve all order records from the OrderInfo table.
+     * method to check if customer number exist in the database
      *
-     * @return ArrayList of OrderInfo object
+     * @return the value that if customer id exist in the database
      */
-    public boolean select(int custNo) {
+    public boolean doesCustNumberExist(int custNo) {
         boolean custIdValid = false;
-        String query = "select customerId from customer where customerId = ?;";
+        String query = "select customerId from Customer where customerId = ?;";
         try {
             pStatement = connection.prepareStatement(query);
             pStatement.setString(1, String.valueOf(custNo));
             result = pStatement.executeQuery();
+
             if (result.next()) {
               custIdValid = true;  
             }
@@ -77,5 +82,29 @@ public class DataAccess {
             e.printStackTrace();
         }
         return custIdValid;
+    }
+
+    public PriceSchedule getCarTypePriceSchedule(String carType) throws CarTypeNotFoundException {
+        PriceSchedule resultPriceSchedule = null;
+        String query = "select * from CarType where ShortName = ?;";
+
+        try {
+            pStatement = connection.prepareStatement(query);
+            pStatement.setString(1, carType);
+            result = pStatement.executeQuery();
+
+            if (result.next()) {
+                resultPriceSchedule = new PriceSchedule(carType, result.getBigDecimal("WeekdayRate"), result.getBigDecimal("WeekendRate"), result.getBigDecimal("WeeklyRate"));
+            } else {
+                System.out.println("Car Type Not Found");
+                throw new CarTypeNotFoundException();
+            }
+
+            return resultPriceSchedule;
+        } catch (SQLException | NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        return resultPriceSchedule;
     }
 }

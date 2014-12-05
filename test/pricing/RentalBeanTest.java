@@ -5,17 +5,11 @@
  */
 package pricing;
 
-import pricing.PriceSchedule;
-import pricing.RentalBean;
-import java.math.BigDecimal;
-import java.util.Calendar;
+import org.junit.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import java.math.BigDecimal;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -59,10 +53,7 @@ public class RentalBeanTest {
         instance.setDropoffMin(2);
         instance.setRentalType("standard");
         instance.setCardType("visa");
-        instance.setCardNumber("4123456789012");
-        instance.setPriceSchedule(customPriceSchedule);
-
-    }
+        instance.setCardNumber("4123456789012"); instance.setPriceSchedule(customPriceSchedule);  }
     
     @After
     public void tearDown() {
@@ -77,7 +68,6 @@ public class RentalBeanTest {
         System.out.println("getPickupYear");
         int expResult = 2014;
         int result = instance.getPickupYear();
-
         assertEquals(expResult, result);
     }
 
@@ -355,6 +345,7 @@ public class RentalBeanTest {
         String expResult = "4123456789012";
         String result = instance.getCardNumber();
         assertEquals(expResult, result);
+
     }
 
     /**

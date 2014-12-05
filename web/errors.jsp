@@ -19,7 +19,7 @@
             <tr>
                 <td>Error Codes</td>
             </tr>
-            <c:forEach items="${errorCodes}" var="codes">
+            <c:forEach items="${requestScope.errorCodes}" var="codes">
                 <tr>
                     <td>
                         <c:out value="${codes}"/>
