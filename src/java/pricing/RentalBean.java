@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+
 /**
  *
  * @author junghun lee and julio tain sueiras
@@ -251,10 +253,12 @@ public class RentalBean implements Serializable{
         int weekdays=0;
         int weekends=0;
 
-        if(getDropoffDay() - getPickupDay() >= 5){
-            resultPrice = priceSchedule.getWeeklyRate().doubleValue()*(getDropoffDay() - getPickupDay());
+        long DayOfRental = TimeUnit.MILLISECONDS.toDays(getDropoffDate().getTimeInMillis() - getPickupDate().getTimeInMillis());
 
+        if(DayOfRental >= 5){
+            resultPrice = priceSchedule.getWeeklyRate().doubleValue()*(DayOfRental);
         }else if((getPickupDay()+1 == getDropoffDay()) && (getPickupHour() > getDropoffHour())){
+
             if(isPickupDateWeekend()){
                 resultPrice = priceSchedule.getWeekendRate().doubleValue();
             }else{

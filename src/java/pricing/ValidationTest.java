@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Null;
 
 /**
  *
@@ -37,53 +38,46 @@ public class ValidationTest extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        RentalFormValidator formValidator = new RentalFormValidator(request);
-        boolean validation = formValidator.isValid();
-        if(validation){
-            DataAccess db = new DataAccess();
-            db.connection();
-            boolean custNumberExist = db.doesCustNumberExist(Integer.parseInt(request.getParameter("customerNo")));
+        try {
+            RentalFormValidator formValidator = new RentalFormValidator(request);
+            boolean validation = formValidator.isValid();
+            if (validation) {
+                DataAccess db = new DataAccess();
+                db.connection();
 
-            if(custNumberExist){
-                custBean = formValidator.getBean();
-		custBean.setRentalType(request.getParameter("cartype"));
-		custBean.setCardType(request.getParameter("creditCardType"));
+                boolean custNumberExist = db.doesCustNumberExist(Integer.parseInt(request.getParameter("customerNo")));
 
-                try {
-                    custBean.setPriceSchedule(db.getCarTypePriceSchedule(custBean.getRentalType()));
-                } catch (CarTypeNotFoundException e) {
-                    e.printStackTrace();
+                if (custNumberExist) {
+                    custBean = formValidator.getBean();
+
+                    try {
+                        custBean.setPriceSchedule(db.getCarTypePriceSchedule(custBean.getRentalType()));
+                    } catch (CarTypeNotFoundException e) {
+                        getServletContext().getRequestDispatcher("/invalidCustomer.jsp").forward(request, response);
+                    }
+                    System.out.println(custBean.getPrice());
+                    db.disconnect();
+                    request.setAttribute("bean", custBean);
+                    getServletContext().getRequestDispatcher("/rentals.jsp").forward(request, response);
+
+                } else {
+                    db.disconnect();
+                    getServletContext().getRequestDispatcher("/invalidCustomer.jsp").forward(request, response);
                 }
-                System.out.println(custBean.getPrice());
-                db.disconnect();
-                request.setAttribute("bean", custBean);
-                getServletContext().getRequestDispatcher("/rentals.jsp").forward(request,response);
 
-            }else{
-                db.disconnect();
-                getServletContext().getRequestDispatcher("/invalidCustomer.jsp").forward(request, response);
+            } else {
+                ArrayList<Integer> errorList = formValidator.getErrorCodes();
+                request.setAttribute("errorCodes", errorList);
+                getServletContext().getRequestDispatcher("/errors.jsp").forward(request, response);
             }
-
-        } else{
-            ArrayList<Integer> errorList = formValidator.getErrorCodes();
-            request.setAttribute("errorCodes", errorList);
-            getServletContext().getRequestDispatcher("/errors.jsp").forward(request, response);
+        }catch(StringIndexOutOfBoundsException e){
+            getServletContext().getRequestDispatcher("/invalidCustomer.jsp").forward(request, response);
         }
 
+
     }
 
 
-    public static void setUpBean(HttpServletRequest request, RentalBean bean){
-        bean.setCustomerNumber(Integer.parseInt(request.getParameter("customerNo")));
-        bean.setPickupHour(Integer.parseInt(request.getParameter("pickupHour")));
-        bean.setPickupDay(Integer.parseInt(request.getParameter("pickupDay")));
-        bean.setPickupMon(Integer.parseInt(request.getParameter("pickupMonth")));
-        bean.setPickupYear(Integer.parseInt(request.getParameter("pickupYear")));
-        bean.setDropoffHour(Integer.parseInt(request.getParameter("dropoffHour")));
-        bean.setDropoffDay(Integer.parseInt(request.getParameter("dropoffDay")));
-        bean.setDropoffMon(Integer.parseInt(request.getParameter("dropoffMonth")));
-        bean.setDropoffYear(Integer.parseInt(request.getParameter("dropoffYear")));
-    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
